@@ -4,7 +4,7 @@
 mkdir -p out
 
 # Assemble the boot sector code
-nasm -f bin boot.asm -o out/boot.bin
+nasm -f bin src/boot-sector/boot.asm -o out/boot.bin
 
 # Create a blank USB image of 64MB
 dd if=/dev/zero of=out/usb.img bs=1M count=64 
