@@ -28,3 +28,8 @@ To build & run the system simply call
 ```
 ./build.sh
 ```
+
+## Import Documentation not part of the repository
+
+- [Quick Reference for Common Interrupts](https://wiki.osdev.org/BIOS)
+- [Ralf Brown's Bios Interrupt List](https://wiki.osdev.org/RBIL)

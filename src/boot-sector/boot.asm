@@ -7,6 +7,7 @@ jmp start       ; Jump to the start label
 %include "src/video-memory/clear-screen.asm"
 %include "src/video-memory/sprint.asm"
 %include "src/bios/set-cursor-position.asm"
+%include "src/interrupt-service-routines/keyboard-interrupt.asm"
 
 section .text
 start:
@@ -19,13 +20,13 @@ start:
 
     mov si, msg         ; Load the message into si
     call sprint         ; Call the imported sprint function, loads cursor target position into dx.
-    call update_cursor  ; Call the imported set cursor position function
 
+    call ivt_iqr1        ; Call the imported set keyboard interrupt handler function
 
-hang:
-    jmp hang
+    jmp $               ; Infinite loop
 
 msg db 'Hello from the Video Memory!', 0 ; Message to be printed
+port60 dw 0 ; Placeholder for values read from port 0x60
 
 ; Fill the rest of the 512-byte boot sector with zeros
 times 510-($-$$) db 0 ; $ is the current address, $$ is the start of the section
