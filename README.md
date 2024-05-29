@@ -66,7 +66,7 @@ and [GNU Mtools](https://www.gnu.org/software/mtools/#downloads).
 To build & run the system simply call
 
 ```
-./build-bootloader.sh
+./build/bootloader.sh
 ```
 
 ### Cross-Compiler
@@ -89,10 +89,14 @@ kernel.c    - This file will contain the majority of our kernel, written in C
 linker.ld   - This file will give the compiler information about how it should construct our kernel executable by linking the previous files together
 ```
 
-This kernel can be run using either:
+This kernel can be run using either of the following commands:
 
 ```
+./build/bare-bones/kernel-elf.sh // Uses the QEMU default Bootloader
+```
 
+```
+./build/bare-bones/kernel-iso.sh // Uses the GRUB Bootloader
 ```
 
 ### Import Documentation not part of the repository
