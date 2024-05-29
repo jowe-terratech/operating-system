@@ -34,3 +34,4 @@ To build & run the system simply call
 
 - [Quick Reference for Common Interrupts](https://wiki.osdev.org/BIOS)
 - [Ralf Brown's Bios Interrupt List](https://wiki.osdev.org/RBIL)
+- [GDT Segment Description](https://wiki.osdev.org/Global_Descriptor_Table#Segment_Descriptor)

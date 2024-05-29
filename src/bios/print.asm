@@ -1,7 +1,7 @@
-bios_print_start:
-    cld ; Clear the direction flag
+bios_print_start:       ; string = si
+    cld                 ; Clear the direction flag
 
-bios_print_char:
+bios_print_char:        
     lodsb               ; Load the byte at si into al, and increment si
     or al, al           ; Equals zero if we've reached the end of the string
     jz bios_print_end   ; If al is zero, jump to the end
@@ -11,4 +11,4 @@ bios_print_char:
     jmp bios_print_char ; Jump back to print the next character
 
 bios_print_end:
-    ret ; Return from the function
+    ret
