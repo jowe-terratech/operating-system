@@ -15,6 +15,8 @@ For now the plan is as follows. After these initial steps I will decide on how t
 
 ## Dependencies
 
+### Bootloader
+
 To install the dependencies run:
 
 ```Ubuntu
@@ -22,15 +24,63 @@ sudo apt install nasm
 sudo apt install qemu-system
 ```
 
+### Kernel (GCC Cross-Compiled)
+
+To install the dependencies to build a [GCC Cross-Compiler](https://wiki.osdev.org/GCC_Cross-Compiler) run:
+
+```
+sudo apt install build-essential bison flex libgmp3-dev libmpc-dev libmpfr-dev textinfo libisl-dev
+```
+
+Download the source code for [GCC](https://www.gnu.org/software/gcc/) and [Binutils](https://www.gnu.org/software/binutils/) into `./cross-compiler`
+
+### Kernel (GRUB & ISO)
+
+To use `GRUB` and create an `.iso` file of the kernel we also need:
+
+```
+sudo apt install grub-pc-bin xorriso
+``` 
+
+and [GNU Mtools](https://www.gnu.org/software/mtools/#downloads).
+
 ## Build & Run the System
+
+### Bootloader
 
 To build & run the system simply call
 
 ```
-./build.sh
+./build-bootloader.sh
 ```
 
-## Import Documentation not part of the repository
+### Cross-Compiler
+
+To use the cross-compiler setup according to the link above, use:
+
+```
+$HOME/opt/cross/bin/i686-elf-gcc -ffreestanding
+```
+
+## Documentation
+
+### Kernel (Zesterer/Bare Bones)
+
+The [Bare Bones Kernel](https://wiki.osdev.org/User:Zesterer/Bare_Bones) consists of 3 files:
+
+```
+start.s     - This file will contain our x86 assembly code that starts our kernel and sets up the x86
+kernel.c    - This file will contain the majority of our kernel, written in C
+linker.ld   - This file will give the compiler information about how it should construct our kernel executable by linking the previous files together
+```
+
+This kernel can be run using either:
+
+```
+
+```
+
+### Import Documentation not part of the repository
 
 - [Quick Reference for Common Interrupts](https://wiki.osdev.org/BIOS)
 - [Ralf Brown's Bios Interrupt List](https://wiki.osdev.org/RBIL)
