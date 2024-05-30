@@ -15,7 +15,7 @@ start:
     xor ax, ax              ; Clear ax
     mov ds, ax              ; Set Data Segment to 0
     mov ss, ax              ; Set Stack Segment to 0
-    mov sp, 0x9c00          ; Set Stack Pointer to 0x9c00 (just below the bootloader)
+    mov sp, 0x9c00          ; Set Stack Pointer to 0x9c00 (2000h below start of the boot sector)
 
     call clear_screen       ; Call the imported clear screen function
 
