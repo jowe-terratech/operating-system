@@ -8,9 +8,9 @@ For now the plan is as follows. After these initial steps I will decide on how t
 
 ### Coming Up
 
-- Update the code from the [Bootloader](https://wiki.osdev.org/Bootloader) into a [custom version](https://wiki.osdev.org/Rolling_Your_Own_Bootloader)
-
 - [Real Mode Assembly](https://wiki.osdev.org/Real_mode_assembly_I): Follow along to deepen understanding of assembly and how Kernels work.
+
+- Update the code from the [Bootloader](https://wiki.osdev.org/Bootloader) into a [custom version](https://wiki.osdev.org/Rolling_Your_Own_Bootloader)
 
 - Building my own Kernel, with the basic components lined out in [What Order Should I make things in?](https://wiki.osdev.org/What_Order_Should_I_Make_Things_In%3F)
 
