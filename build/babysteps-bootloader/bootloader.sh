@@ -1,7 +1,8 @@
 #!/bin/bash
 
-# Create the out/ directory if it does not exist
-mkdir -p out
+# Re-create the out/ directory
+rm -rf out
+mkdir out
 
 # Assemble the boot sector code
 nasm -f bin src/babysteps-bootloader/boot-sector/boot.asm -o out/boot.bin

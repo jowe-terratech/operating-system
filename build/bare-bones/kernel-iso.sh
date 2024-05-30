@@ -1,3 +1,9 @@
+#!/bin/bash
+
+# Re-create the out/ directory
+rm -rf out
+mkdir out
+
 # Compile the kernel
 $HOME/opt/cross/bin/i686-elf-gcc -std=gnu99 -ffreestanding -g -c src/bare-bones-kernel/start.s -o out/start.o
 $HOME/opt/cross/bin/i686-elf-gcc -std=gnu99 -ffreestanding -g -c src/bare-bones-kernel/kernel.c -o out/kernel.o

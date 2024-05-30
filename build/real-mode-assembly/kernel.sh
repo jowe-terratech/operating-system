@@ -1,7 +1,8 @@
 #!/bin/bash
 
-# Create the out/ directory if it does not exist
-mkdir -p out
+# Re-create the out/ directory
+rm -rf out
+mkdir out
 
 # Assemble the boot sector code
 nasm -f bin src/real-mode-assembly/kernel.asm -o out/kernel.bin
