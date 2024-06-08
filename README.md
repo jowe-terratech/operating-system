@@ -99,5 +99,6 @@ The bootloader, due to its easy access to the BIOS needs to do a few things befo
 #### Outline
 
 Before starting to work on the Bootloader, there are some design decisions to make. These include:
-- Do I need a two-stage bootloader?
 - Where is the Kernel stored? On an unformatted drive or i.e. a [FAT-formatted](https://wiki.osdev.org/FAT) USB?
+
+[How to load the second stage?!](http://www.brokenthorn.com/Resources/OSDev6.html)
