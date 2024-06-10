@@ -30,6 +30,9 @@ verify_unreal:
     ; ==========================================
     ; verify_unreal - Verify that we are in 32 bit mode
     ; by writing to an address above 1MB
+    ; Returns:
+    ;   al = 1 if we are in 32 bit mode
+    ;   al = 0 if we are not in 32 bit mode
     ; ==========================================
     
     ; Write an arbitrary value to an address above 1MB
@@ -42,19 +45,15 @@ verify_unreal:
     cmp eax, 0x12345678 ; Compare the value
     jne .error          ; If the value is not the same, we are not in 32 bit mode
 
-    ; Print success message
-    mov si, unreal_success_msg  
-    call bprint
+    ; We are in 32 bit mode
+    xor al, al
+    mov al, 0x01
     ret
 
     .error:
-        ; Print fail message
-        mov si, unreal_error_msg 
-        call bprint
+        xor al, al
+        mov al, 0x00
         ret
-
-unreal_success_msg db 'Entered Unreal-Mode.', 0x00
-unreal_error_msg db 'Unable to enter Unreal-Mode', 0x00
 
 gdtr:
     dw gdt_end - gdt - 1                        ; Last byte of GDT

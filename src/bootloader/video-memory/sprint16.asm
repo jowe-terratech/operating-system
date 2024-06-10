@@ -15,6 +15,12 @@ sprint:
     jne sprint_next             ; If null, end
     ret
 
+sprint_with_newline:
+    call sprint                 ; Print the string
+    call sprint_newline         ; Update cursor position variables
+    call sprint_update_cursor   ; Update cursor
+    ret
+
 cprint:
     ; ==========================================
     ; cprint - Print a single character using the video memory
@@ -40,12 +46,12 @@ cprint:
 
     ; Check if we need to wrap to the next line
     cmp byte [sprint_xpos], 80
-    jl sprint_no_wrap
+    jl sprint_update_cursor
 
     ; If xpos >= 80, reset xpos to 0 and increment ypos
     call sprint_newline
 
-sprint_no_wrap:
+sprint_update_cursor:
     mov dl, [sprint_xpos]           ; Move sprint_ypos to dl
     mov dh, [sprint_ypos]           ; Move sprint_ypos to dh
     call cursor_set_pos             ; Update the visible cursor accordingly

@@ -8,6 +8,9 @@ SECTIONS
     . = 0x7c00; 
     .text : { *(.text) }
 
+    . = 0x8000;
+    .stage2 : { *(.stage2) }
+
     /* Read-Write Data */
     .data : { *(.data) }
 
