@@ -3,7 +3,7 @@ ENTRY(start)
 
 /* Tell the linker where to place sections in the kernel executable. */
 SECTIONS {
-    /* Start the kernel at the 1MB mark. */
+    /* Start the kernel at the 2MB mark. */
     . = 2M;
 
     /* Align sections in 4KB chunks, useful when adding paging. */

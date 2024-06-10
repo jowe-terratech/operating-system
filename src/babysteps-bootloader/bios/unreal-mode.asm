@@ -30,17 +30,17 @@ verify_unreal_mode:
     cmp eax, 0x12345678     ; Compare the read value with the original
     jne not_unreal_mode     ; If not equal, jump to error handling
 
-    mov si, success_msg     ; Load the success message into si
+    mov si, unreal_success_msg     ; Load the success message into si
     call sprint             ; Print the verification message
     ret
 
 not_unreal_mode:
-    mov si, error_msg       ; Load the error message into si
+    mov si, unreal_error_msg       ; Load the error message into si
     call sprint             ; Print the error message
     ret
 
-success_msg db 'Unreal Mode', 0
-error_msg db 'Still in Real', 0
+unreal_success_msg db 'Entered Unreal-Mode.', 0
+unreal_error_msg db 'Unable to enter Unreal-Mode', 0
 
 gdtr:
     dw gdt_end - gdt - 1                        ; Last byte of GDT
