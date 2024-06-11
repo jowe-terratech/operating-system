@@ -15,10 +15,33 @@ sprint:
     jne sprint_next             ; If null, end
     ret
 
-sprint_with_newline:
-    call sprint                 ; Print the string
-    call sprint_newline         ; Update cursor position variables
-    call sprint_update_cursor   ; Update cursor
+sprint_hex:
+    ; ==========================================
+    ; sprint_hex - Print a 16-bit number as a 4-digit hex string using the video memory
+    ; Arguments:
+    ; - al contains the value to print
+    ; ==========================================
+
+    ; Clear registers we will use, except al as that is the input
+    xor ah, ah
+    xor bx, bx
+    xor cx, cx
+
+    ; Print a 4-digit hex string
+    mov cx, 0x04                ; Set loop counter to 4
+    .hex_loop:
+    rol ax, 0x04                ; Rotate ax left by 4 bits (1 digit)
+    mov bl, al                  ; Move al to bl
+    and bl, 0x0f                ; Mask the upper 4 bits
+    cmp bl, 0x09                ; Check if its a number
+    jbe .number                 ; If it is, jump to .number
+    add bl, 0x07                ; If not, add 7 to get the correct ASCII value of a-f
+    .number:
+    add bl, 0x30                ; Convert to ASCII
+    mov al, bl                  ; Move bl to al
+    call cprint                 ; Print the character
+    loop .hex_loop              ; Loop until cx is 0
+
     ret
 
 cprint:
@@ -27,6 +50,11 @@ cprint:
     ; Arguments:
     ; - al contains the character to print
     ; ==========================================
+    ; Safe registers: ax, bx, cx
+    push ax
+    push bx
+    push cx
+
     mov ah, 0x0f                    ; Set the attribute to white on black
     mov cx, ax                      ; Save character+attribute in cx
     movzx ax, byte [sprint_ypos]    ; Move sprint_ypos to ax
@@ -46,15 +74,21 @@ cprint:
 
     ; Check if we need to wrap to the next line
     cmp byte [sprint_xpos], 80
-    jl sprint_update_cursor
+    jl .sprint_update_cursor
 
     ; If xpos >= 80, reset xpos to 0 and increment ypos
     call sprint_newline
 
-sprint_update_cursor:
-    mov dl, [sprint_xpos]           ; Move sprint_ypos to dl
-    mov dh, [sprint_ypos]           ; Move sprint_ypos to dh
-    call cursor_set_pos             ; Update the visible cursor accordingly
+    .sprint_update_cursor:
+        mov dl, [sprint_xpos]           ; Move sprint_ypos to dl
+        mov dh, [sprint_ypos]           ; Move sprint_ypos to dh
+        call cursor_set_pos             ; Update the visible cursor accordingly
+
+    ; Restore registers
+    pop cx
+    pop bx
+    pop ax
+
     ret
 
 sprint_newline:

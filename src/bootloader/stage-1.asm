@@ -32,7 +32,8 @@ start:
 
     ; Log a success message
     mov si, success_msg
-    call sprint_with_newline
+    call sprint
+    call sprint_newline
 
     ; Enter unreal mode to support 32-bit addressing
     call enable_unreal
@@ -44,36 +45,46 @@ start:
 
     ; Log a success message
     mov si, unreal_success_msg
-    call sprint_with_newline
+    call sprint
+    call sprint_newline
 
     ; Load the second stage bootloader
     mov ax, 0x8000          ; Address of the second stage bootloader, specified in linker.ld
     mov es, ax              ; Set Extra Segment to 0x8000
 
     ; BIOS interrupt to read disk sectors
-    mov bx, 0x0000          ; Offset of the second stage bootloader in its segment
-    mov ah, 0x02            ; BIOS function to read sectors from disk
-    mov al, 0x01            ; Number of sectors to read
-    mov ch, 0x00            ; Cylinder number
-    mov cl, 0x02            ; Sector number, (second sector)
-    mov dh, 0x00            ; Head number
-    int 0x13                ; Call the BIOS interrupt
+    xor ax, ax              ; Clear ax
+    mov es, ax              ; Clear es
 
-    ; Show an error message if we couldn't load the second stage bootloader
-    mov si, error_msg
+    int 0x13                ; Call the BIOS interrupt, since ah = 0x00, this is the reset disk system
     jc error                ; Jump if carry flag is set, set by the BIOS if an error occurs
-
-    ; Call the second stage bootloader
-    jmp 0x8000:0x0000       ; Far jump to the second stage bootloader
-
-    jmp $                   ; Infinite loop
-
-error:
-    call sprint
     jmp $
 
-success_msg db 'First stage bootloader loaded successfully!', 0x00
-error_msg db 'Error loading the second stage bootloader!', 0x00
+    ; mov bx, 0x0000          ; Offset of the second stage bootloader in its segment
+    ; mov ah, 0x02            ; BIOS function to read sectors from disk
+    ; mov al, 0x01            ; Number of sectors to read
+    ; mov ch, 0x00            ; Cylinder number
+    ; mov cl, 0x02            ; Sector number, (second sector)
+    ; mov dh, 0x00            ; Head number
+    ; int 0x13                ; Call the BIOS interrupt
+    ; jc error                ; Jump if carry flag is set, set by the BIOS if an error occurs
+
+    ; ; Call the second stage bootloader
+    ; jmp 0x8000:0x0000       ; Far jump to the second stage bootloader
+
+error:
+    ; Log an error message
+    mov si, error_msg
+    call sprint
+
+    ; Print the error code
+    xor ah, ah              ; Clear ah for safe printing
+    call sprint_hex     ; Print the error code
+
+    jmp $
+
+success_msg db '1. Stage!', 0x00
+error_msg db 'Error: ', 0x00
 
 unreal_success_msg db 'Entered Unreal-Mode.', 0x00
 unreal_error_msg db 'Unable to enter Unreal-Mode', 0x00
