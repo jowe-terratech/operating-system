@@ -48,13 +48,14 @@ start:
     call sprint
     call sprint_newline
 
-    ; Load the second stage bootloader
-    mov ax, 0x8000          ; Address of the second stage bootloader, specified in linker.ld
-    mov es, ax              ; Set Extra Segment to 0x8000
 
     ; BIOS interrupt to read disk sectors
     xor ax, ax              ; Clear ax
     mov es, ax              ; Clear es
+
+    ; Load the second stage bootloader [TODO: TRIGGERS AN EMPTY ERROR WHEN PLACE AT LINE 56]
+    mov ax, 0x8000          ; Address of the second stage bootloader, specified in linker.ld
+    mov es, ax              ; Set Extra Segment to 0x8000
 
     int 0x13                ; Call the BIOS interrupt, since ah = 0x00, this is the reset disk system
     jc error                ; Jump if carry flag is set, set by the BIOS if an error occurs
@@ -78,7 +79,7 @@ error:
     call sprint
 
     ; Print the error code
-    xor ah, ah              ; Clear ah for safe printing
+    xor ah, ah          ; Clear ah for safe printing
     call sprint_hex     ; Print the error code
 
     jmp $

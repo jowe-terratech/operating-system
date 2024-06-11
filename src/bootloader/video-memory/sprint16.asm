@@ -1,18 +1,26 @@
-sprint_next:
-    call cprint                 ; Print the next character
-
 sprint:
     ; ==========================================
     ; sprint - Print a null-terminated string using the video memory
     ; Arguments: 
     ; - si points to the string
     ; ==========================================
-    mov ax, 0xb800              ; Video memory segment (color text mode)
-    mov es, ax                  ; Set Extra Segment to video memory segment
-    cld                         ; Clear the direction flag
-    lodsb                       ; Load byte at ds:si into al, increment si because di is clear
-    cmp al, 0                   ; Check if byte is null (end of string)
-    jne sprint_next             ; If null, end
+    pusha
+    push es 
+    jmp .sprint_start
+
+    .sprint_next:
+        call cprint                 ; Print the next character
+
+    .sprint_start:
+        mov ax, 0xb800              ; Video memory segment (color text mode)
+        mov es, ax                  ; Set Extra Segment to video memory segment
+        cld                         ; Clear the direction flag
+        lodsb                       ; Load byte at ds:si into al, increment si because di is clear
+        cmp al, 0                   ; Check if byte is null (end of string)
+        jne .sprint_next             ; If null, end
+
+    pop es
+    popa
     ret
 
 sprint_hex:
@@ -27,20 +35,28 @@ sprint_hex:
     xor bx, bx
     xor cx, cx
 
-    ; Print a 4-digit hex string
+    ; Build a 4-digit hex string
     mov cx, 0x04                ; Set loop counter to 4
+
     .hex_loop:
-    rol ax, 0x04                ; Rotate ax left by 4 bits (1 digit)
-    mov bl, al                  ; Move al to bl
-    and bl, 0x0f                ; Mask the upper 4 bits
-    cmp bl, 0x09                ; Check if its a number
-    jbe .number                 ; If it is, jump to .number
-    add bl, 0x07                ; If not, add 7 to get the correct ASCII value of a-f
+        rol ax, 0x04                ; Rotate ax left by 4 bits (1 digit)
+        mov bl, al                  ; Move al to bl
+        and bl, 0x0f                ; Mask the upper 4 bits
+        
+        or bl, bl                  ; Check if we reached the end of the number
+        je .done                    ; If we did, we are done
+
+        cmp bl, 0x09                ; Check if its a number
+        jbe .number                 ; If it is, jump to .number
+        add bl, 0x07                ; If not, add 7 to get the correct ASCII value of a-f
+
     .number:
-    add bl, 0x30                ; Convert to ASCII
-    mov al, bl                  ; Move bl to al
-    call cprint                 ; Print the character
-    loop .hex_loop              ; Loop until cx is 0
+        add bl, 0x30                ; Convert to ASCII
+        mov al, bl                  ; Move bl to al
+        call cprint                 ; Print the character
+        loop .hex_loop              ; Loop until cx is 0
+
+    .done:
 
     ret
 
