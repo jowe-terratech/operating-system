@@ -1,6 +1,6 @@
-enable_unreal:
+enable_unreal_mode:
     ; ==========================================
-    ; enable_unreal - Enables 32 bit addressing
+    ; enable_unreal_mode - Enables 32 bit addressing
     ; ==========================================
     
     ; Load the GDT
@@ -26,9 +26,9 @@ enable_unreal:
     sti             ; Re-enable interrupts
     ret
 
-verify_unreal:
+verify_unreal_mode:
     ; ==========================================
-    ; verify_unreal - Verify that we are in 32 bit mode
+    ; verify_unreal_mode - Verify that we are in 32 bit mode
     ; by writing to an address above 1MB
     ; Returns:
     ;   al = 1 if we are in 32 bit mode

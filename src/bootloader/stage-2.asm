@@ -1,22 +1,35 @@
 ; ======================================================
 ; Second stage of the 2-stage Bootloader
 ; ======================================================
-BITS 16         ; Specify 16-bit mode, as the CPU starts in real mode
-
-jmp start       ; Jump to the start label
-
-%include "src/bootloader/bios/cursor.asm"
-%include "src/bootloader/video-memory/sprint16.asm"
-
 section .stage2  ; This defines the entry point of the second stage bootloader
 
-start:
+bootloader:
     ; Log a success message
-    mov si, msg
+    mov si, success_msg
     call sprint 
 
     cli            ; Disable interrupts
     hlt            ; Halt the CPU
     jmp $          ; Infinite loop
 
-msg db 'Second stage bootloader loaded successfully!', 0x00
+success_msg db 'Second stage bootloader loaded successfully!', 0x00
+
+sprint:
+    lodsb                   ; Load the next byte from si into al
+    
+    ; Print if al is not null
+    or al, al               ; Check if al is null
+    jz .done                ; If al is null, we are done
+    
+    mov ah, 0x0e            ; Set the BIOS teletype function
+    int 0x10                ; Call the BIOS teletype function
+    
+    jmp sprint              ; Repeat the process
+    
+    .done:
+        ; Add a newline
+        mov al, 0x0d       ; Move to the beginning of the line
+        int 0x10           ; Call the BIOS teletype function
+        mov al, 0x0a       ; Move to the next line
+        int 0x10           ; Call the BIOS teletype function
+        ret
