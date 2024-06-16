@@ -33,7 +33,7 @@ start:
     mov ch, 0x00            ; Cylinder number
     mov cl, 0x03            ; Sector number, (second sector)
     mov dh, 0x00            ; Head number
-    int 0x13                ; Call the BIOS interrupt
+    int 0x13                ; Call the BIOS interrupt, reads to es:bx
     jc .error               ; Jump if carry flag is set, set by the BIOS if an error occurs
 
     ; Log a success message
@@ -74,7 +74,7 @@ print_second_stage_bytes:
     mov ax, 0x8000
     mov ds, ax
     mov si, 0x0000
-    mov cx, 128              ; Number of bytes to print
+    mov cx, 128             ; Number of bytes to print
     xor dx, dx              ; Reset counter for spacing
 
 .print_loop:
