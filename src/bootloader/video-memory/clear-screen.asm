@@ -1,9 +1,7 @@
 clear_screen:
     ; Save variables that will be used
-    push ax
-    push es
     push di
-    push cx
+    pusha
 
     ; Setup video-memory
     mov ax, 0xb800  ; Video memory segment (color text mode)
@@ -19,8 +17,6 @@ clear_screen_main:
 
 clear_screen_end:
     ; Restore variables
-    pop cx
+    popa
     pop di
-    pop es
-    pop ax
     ret

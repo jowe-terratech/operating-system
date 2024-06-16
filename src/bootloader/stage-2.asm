@@ -1,36 +1,46 @@
+; ======================================================
 ; Second stage of the 2-stage Bootloader
+; ======================================================
 BITS 16
-section .stage2
+section .stage2  ; This defines the entry point of the second stage bootloader
 
-bootloader:
-    ; Log a success message
-    mov si, success_msg
-    call sprint
-    
-    jmp 0x0000:0x7c00   ; Jump to the bootloader
+start:
+    mov ax, 0x8000      ; The address where we loaded the second stage bootloader
+    mov ds, ax          ; Set the data segment to the address where we loaded the second stage bootloader
+    mov es, ax          ; Set the extra segment to the address where we loaded the second stage bootloader
+    mov fs, ax          ; Set the fs segment to the address where we loaded the second stage bootloader
+    mov gs, ax          ; Set the gs segment to the address where we loaded the second stage bootloader
+    mov ss, ax          ; Set the stack segment to the address where we loaded the second stage bootloader
 
-    cli             ; Disable interrupts
-    hlt             ; Halt the CPU
-    jmp $           ; Infinite loop
+    call clear_screen
+    ; jmp 0x0000:0x7c00   ; Jump to the bootloader
 
-success_msg db 'Second stage bootloader loaded successfully!', 0x00
 
-sprint:
-    lodsb                   ; Load the next byte from si into al
-    
-    ; Print if al is not null
-    or al, al               ; Check if al is null
-    jz .done                ; If al is null, we are done
-    
-    mov ah, 0x0e            ; Set the BIOS teletype function
-    int 0x10                ; Call the BIOS teletype function
-    
-    jmp sprint              ; Repeat the process
-    
-    .done:
-        ; Add a newline
-        mov al, 0x0d       ; Move to the beginning of the line
-        int 0x10           ; Call the BIOS teletype function
-        mov al, 0x0a       ; Move to the next line
-        int 0x10           ; Call the BIOS teletype function
-        ret
+    cli            ; Disable interrupts
+    hlt            ; Halt the CPU
+    jmp $          ; Infinite loop
+
+msg db 'Second stage bootloader loaded successfully!', 0x00
+
+clear_screen:
+    ; Save variables that will be used
+    push di
+    pusha
+
+    ; Setup video-memory
+    mov ax, 0xb800  ; Video memory segment (color text mode)
+    mov es, ax      ; Set Extra Segment to video memory segment
+    mov di, 0       ; Start at the beginning of video memory
+    mov cx, 2000    ; Clear 80 columns * 25 rows * 2 bytes (character and attribute)
+
+clear_screen_main:
+    ; Print " " (space) character with attribute 0x0f (white on black)
+    mov ax, 0x0f20          ; Space character in attribute 0x0f (white on black)
+    stosw                   ; Store ax at es:di and increment di by 2
+    loop clear_screen_main  ; Loop cx times
+
+clear_screen_end:
+    ; Restore variables
+    popa
+    pop di
+    ret
