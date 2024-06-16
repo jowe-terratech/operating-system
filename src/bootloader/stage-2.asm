@@ -1,16 +1,17 @@
-; ======================================================
 ; Second stage of the 2-stage Bootloader
-; ======================================================
-section .stage2  ; This defines the entry point of the second stage bootloader
+BITS 16
+section .stage2
 
 bootloader:
     ; Log a success message
     mov si, success_msg
-    call sprint 
+    call sprint
+    
+    jmp 0x0000:0x7c00   ; Jump to the bootloader
 
-    cli            ; Disable interrupts
-    hlt            ; Halt the CPU
-    jmp $          ; Infinite loop
+    cli             ; Disable interrupts
+    hlt             ; Halt the CPU
+    jmp $           ; Infinite loop
 
 success_msg db 'Second stage bootloader loaded successfully!', 0x00
 

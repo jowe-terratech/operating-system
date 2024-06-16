@@ -40,15 +40,20 @@ start:
     mov si, read_success_msg
     call sprint
 
+    ; Far jump to the second stage
+    jmp 0x8000:0x0000
+
     call print_second_stage_bytes
-
-    jmp 0x8000:0x0000       ; Jump to the second stage bootloader
-
     
     .error:
         mov si, error_msg
         call sprint
         jmp $
+
+start_return:
+    mov si, return_msg
+    call sprint
+    jmp $
 
 sprint:
     lodsb                   ; Load the next byte from si into al
@@ -71,10 +76,10 @@ sprint:
         ret
 
 print_second_stage_bytes:
-    mov ax, 0x8000
+    mov ax, 0x0000
     mov ds, ax
-    mov si, 0x0000
-    mov cx, 128             ; Number of bytes to print
+    mov si, 0x7c00
+    mov cx, 512             ; Number of bytes to print
     xor dx, dx              ; Reset counter for spacing
 
 .print_loop:
@@ -136,6 +141,7 @@ unreal_success_msg db 'Entered Unreal-Mode.', 0x00
 unreal_error_msg db 'Error entering Unreal-Mode.', 0x00
 read_success_msg db 'Second Stage read.', 0x00
 error_msg db 'Error loading Second Stage.', 0x00
+return_msg db 'Returned from second stage.', 0x00
 
 ; Boot Sector Signature
 times 510-($-$$) db 0
