@@ -13,14 +13,10 @@ start:
     mov ss, ax          ; Set the stack segment to the address where we loaded the second stage bootloader
 
     call clear_screen
-    ; jmp 0x0000:0x7c00   ; Jump to the bootloader
-
 
     cli            ; Disable interrupts
     hlt            ; Halt the CPU
     jmp $          ; Infinite loop
-
-msg db 'Second stage bootloader loaded successfully!', 0x00
 
 clear_screen:
     ; Save variables that will be used
