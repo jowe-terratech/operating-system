@@ -44,7 +44,7 @@ sudo apt install qemu-system
 To install the dependencies to build a [GCC Cross-Compiler](https://wiki.osdev.org/GCC_Cross-Compiler) run:
 
 ```
-sudo apt install build-essential bison flex libgmp3-dev libmpc-dev libmpfr-dev textinfo libisl-dev
+sudo apt install build-essential bison flex libgmp3-dev libmpc-dev libmpfr-dev texinfo libisl-dev
 ```
 
 Download the source code for [GCC](https://www.gnu.org/software/gcc/) and [Binutils](https://www.gnu.org/software/binutils/) into `./cross-compiler`
