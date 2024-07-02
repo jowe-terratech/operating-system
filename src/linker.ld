@@ -9,7 +9,7 @@ SECTIONS
     .text : { *(.text) }
 
     . = 0x8000;
-    .stage2 : { *(.stage2) }
+    .bootloader : { *(.bootloader) }
 
     /* Read-Write Data */
     .data : { *(.data) }

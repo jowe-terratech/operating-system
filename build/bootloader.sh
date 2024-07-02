@@ -5,9 +5,9 @@ rm -rf out
 mkdir out
 
 # Compile the bootloader using only the first bootloader stage
-nasm -f elf32 src/bootloader/stage-1.asm -o out/stage1.o
-nasm -f elf32 src/bootloader/stage-2.asm -o out/stage2.o
-$HOME/opt/cross/bin/i686-elf-ld -T src/linker.ld -o out/bootloader.bin out/stage1.o out/stage2.o
+nasm -f elf32 src/boot-sector.asm -o out/boot-sector.o
+nasm -f elf32 src/boot-loader.asm -o out/boot-loader.o
+$HOME/opt/cross/bin/i686-elf-ld -T src/linker.ld -o out/bootloader.bin out/boot-sector.o out/boot-loader.o
 
 # Create a blank USB image of 64MB
 dd if=/dev/zero of=out/usb.img bs=1M count=64 
