@@ -4,18 +4,18 @@ BITS 16         ; Specify 16-bit mode, as the CPU starts in real mode
 jmp start       ; Jump to the start label
 
 ; %include "src/bios/print.asm" ; Imports need to be at the top of the file
-%include "src/bootloader/video-memory/clear-screen.asm"
-%include "src/bootloader/video-memory/sprint16.asm"
-%include "src/bootloader/bios/cursor.asm"
-%include "src/bootloader/interrupt-service-routines/keyboard-interrupt.asm"
-%include "src/bootloader/bios/unreal-mode.asm"
+%include "src/babysteps-bootloader/video-memory/clear-screen.asm"
+%include "src/babysteps-bootloader/video-memory/sprint16.asm"
+%include "src/babysteps-bootloader/bios/cursor.asm"
+%include "src/babysteps-bootloader/interrupt-service-routines/keyboard-interrupt.asm"
+%include "src/babysteps-bootloader/bios/unreal-mode.asm"
 
 section .text
 start:
     xor ax, ax              ; Clear ax
     mov ds, ax              ; Set Data Segment to 0
     mov ss, ax              ; Set Stack Segment to 0
-    mov sp, 0x9c00          ; Set Stack Pointer to 0x9c00 (just below the bootloader)
+    mov sp, 0x9c00          ; Set Stack Pointer to 0x9c00 (2000h below start of the boot sector)
 
     call clear_screen       ; Call the imported clear screen function
 

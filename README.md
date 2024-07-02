@@ -8,9 +8,7 @@ For now the plan is as follows. After these initial steps I will decide on how t
 
 ### Coming Up
 
-- [Real Mode Assembly](https://wiki.osdev.org/Real_mode_assembly_I): Follow along to deepen understanding of assembly and how Kernels work.
-
-- Update the code from the [Bootloader](https://wiki.osdev.org/Bootloader) into a [custom version](https://wiki.osdev.org/Rolling_Your_Own_Bootloader)
+- Update the code from the [Babysteps Bootloader](https://wiki.osdev.org/Category:Babystep) into a [custom version](https://wiki.osdev.org/Rolling_Your_Own_Bootloader)
 
 - Building my own Kernel, with the basic components lined out in [What Order Should I make things in?](https://wiki.osdev.org/What_Order_Should_I_Make_Things_In%3F)
 
@@ -28,6 +26,8 @@ For now the plan is as follows. After these initial steps I will decide on how t
 
 - [Bare Bones Tutorial](https://wiki.osdev.org/User:Zesterer/Bare_Bones): Follow along to refresh understanding of C and learn about [Kernels](https://wiki.osdev.org/Kernel).
 
+- [Real Mode Assembly](https://wiki.osdev.org/Real_mode_assembly_I): Follow along to deepen understanding of assembly and how Kernels work.
+
 ## Dependencies
 
 ### Bootloader
@@ -44,7 +44,7 @@ sudo apt install qemu-system
 To install the dependencies to build a [GCC Cross-Compiler](https://wiki.osdev.org/GCC_Cross-Compiler) run:
 
 ```
-sudo apt install build-essential bison flex libgmp3-dev libmpc-dev libmpfr-dev textinfo libisl-dev
+sudo apt install build-essential bison flex libgmp3-dev libmpc-dev libmpfr-dev texinfo libisl-dev
 ```
 
 Download the source code for [GCC](https://www.gnu.org/software/gcc/) and [Binutils](https://www.gnu.org/software/binutils/) into `./cross-compiler`
@@ -79,28 +79,26 @@ $HOME/opt/cross/bin/i686-elf-gcc -ffreestanding
 
 ## Documentation
 
-### Kernel (Zesterer/Bare Bones)
-
-The [Bare Bones Kernel](https://wiki.osdev.org/User:Zesterer/Bare_Bones) consists of 3 files:
-
-```
-start.s     - This file will contain our x86 assembly code that starts our kernel and sets up the x86
-kernel.c    - This file will contain the majority of our kernel, written in C
-linker.ld   - This file will give the compiler information about how it should construct our kernel executable by linking the previous files together
-```
-
-This kernel can be run using either of the following commands:
-
-```
-./build/bare-bones/kernel-elf.sh // Uses the QEMU default Bootloader
-```
-
-```
-./build/bare-bones/kernel-iso.sh // Uses the GRUB Bootloader
-```
-
 ### Import Documentation not part of the repository
 
 - [Quick Reference for Common Interrupts](https://wiki.osdev.org/BIOS)
 - [Ralf Brown's Bios Interrupt List](https://wiki.osdev.org/RBIL)
 - [GDT Segment Description](https://wiki.osdev.org/Global_Descriptor_Table#Segment_Descriptor)
+
+### The Bootloader
+
+The bootloader, due to its easy access to the BIOS needs to do a few things before transfering control to the kernel:
+- Activate the [A20 Gate](https://wiki.osdev.org/A20_Line)
+- Switch to [Unreal Mode](https://wiki.osdev.org/Unreal_Mode)
+- Load the Kernel
+- Gather Information: 
+    - [Amount of RAM](https://wiki.osdev.org/How_Do_I_Determine_The_Amount_Of_RAM)
+    - [Available Video Modes](https://wiki.osdev.org/Getting_VBE_Mode_Info)
+- Enter [Protected Mode](https://wiki.osdev.org/Protected_Mode)
+
+#### Outline
+
+Before starting to work on the Bootloader, there are some design decisions to make. These include:
+- Where is the Kernel stored? On an unformatted drive or i.e. a [FAT-formatted](https://wiki.osdev.org/FAT) USB?
+
+[How to load the second stage?!](http://www.brokenthorn.com/Resources/OSDev6.html)

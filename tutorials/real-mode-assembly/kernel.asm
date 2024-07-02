@@ -20,12 +20,17 @@ main:
     cmp byte [si], 0
     je main
 
+    ; ========================
     ; Check for commands 
+    ; ========================
+
+    ; Check for the command "hi"
     mov si, buffer
     mov di, cmd_hi
     call strcmp
     jc .helloworld
 
+    ; Check for the command "help"
     mov si, buffer
     mov di, cmd_help
     call strcmp
