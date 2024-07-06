@@ -16,10 +16,12 @@ sprint:
     
     ; Compute the offset from video memory beginning
     movzx ax, dh
+    movzx bx, dl
     mov cx, 160             ; 80 columns, 2 bytes (char+attr) each
     mul cx
+    mov cx, ax              ; We manage the offset in cx
     mov di, 0x00
-    add di, cx              ; Offset is read from di
+    add di, cx              ; Offset is read from di later on
     movzx cx, dl
     shl bx, 1               ; Multiply by 2 with a byte shift
     add di, bx
@@ -36,8 +38,6 @@ sprint:
 
         ; Display the character
         stosw               ; [ds:di] = ax, di += 2
-
-        jmp .done
 
         ; Update the cursor, current position still stored in dx
         inc dl
